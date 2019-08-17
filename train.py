@@ -5,6 +5,7 @@ from utils import ImageGenerator
 batch_size = 2
 epochs = 10
 learning_rate = 0.0001
+report_epoch = 1
 
 gen = ImageGenerator(batch_size, True, './data')
 
@@ -27,6 +28,11 @@ with tf.device('/cpu:0'):
     for epoch in range(epochs):
         batch, img_result = gen.next_batch()
         sess.run(train, feed_dict={images: batch, true_out: img_result, train_mode: True})
+
+        if epoch%report_epoch == 0:
+
+            print('epoch: ' + str(epoch) + '|' + 'train_loss: ' + str(train_loss) + '|' +
+                  'valid_loss' + str(valid_loss))
         del batch, img_result
 
-        print(str(epoch))
+
