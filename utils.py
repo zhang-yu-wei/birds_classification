@@ -45,9 +45,9 @@ class ImageGenerator():
 
     def get_valid(self):
         data_batch = np.zeros([self.valid_num, 480, 480, 3])
-        label_batch = [self.valid_num, 4]
+        label_batch = np.zeros([self.valid_num, 4])
         count = 0
-        while(count<self.valid_num):
+        while(count < self.valid_num):
             data_name = self.valid_list[count]
             data_batch[count] = np.load(self.path + '/' + 'valid' + '/' + data_name)
             label_batch[count] = [1 if i == int(data_name[6]) else 0 for i in range(4)]
