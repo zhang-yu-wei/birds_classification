@@ -4,9 +4,8 @@ import random
 
 
 class ImageGenerator():
-    def __init__(self, batch_size, train, path):
+    def __init__(self, batch_size, path, test_num, valid_num):
         self.batch_size = batch_size
-        self.train = train # bool get what type of data
         self.last = 0
         self.path = path
 
@@ -20,8 +19,8 @@ class ImageGenerator():
         random.shuffle(self.valid_list)
 
         self.train_num = len(self.train_list)
-        self.test_num = len(self.test_list)
-        self.valid_num = len(self.valid_list)
+        self.test_num = min(len(self.test_list), test_num)
+        self.valid_num = min(len(self.valid_list), valid_num)
 
     def next_batch(self):
         train_last = self.train_num - 1
