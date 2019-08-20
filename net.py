@@ -38,7 +38,7 @@ class Vgg16:
 
         self.conv1_1 = self.conv_layer(bgr, 3, 64, "conv1_1")
         self.conv1_2 = self.conv_layer(self.conv1_1, 64, 64, "conv1_2")
-        self.pool1 = self.max_pool2(self.conv1_2, 'pool1')
+        self.pool1 = self.max_pool4(self.conv1_2, 'pool1')
 
         self.conv2_1 = self.conv_layer(self.pool1, 64, 128, "conv2_1")
         self.conv2_2 = self.conv_layer(self.conv2_1, 128, 128, "conv2_2")
@@ -59,7 +59,7 @@ class Vgg16:
         self.conv5_3 = self.conv_layer(self.conv5_2, 512, 512, "conv5_3")
         self.pool5 = self.max_pool3(self.conv5_3, 'pool5')
 
-        self.fc6 = self.fc_layer(self.pool5, 51200, 4096, "fc6")
+        self.fc6 = self.fc_layer(self.pool5, 12800, 4096, "fc6")
         self.relu6 = tf.nn.relu(self.fc6)
         if train_mode is not None:
             self.relu6 = tf.cond(train_mode, lambda: tf.nn.dropout(self.relu6, self.dropout), lambda: self.relu6)
@@ -87,6 +87,9 @@ class Vgg16:
 
     def max_pool3(self, bottom, name):
         return tf.nn.max_pool(bottom, ksize=[1, 2, 2, 1], strides=[1, 3, 3, 1], padding='SAME', name=name)
+
+    def max_pool4(self, bottom, name):
+        return tf.nn.max_pool(bottom, ksize=[1, 2, 2, 1], strides=[1, 4, 4, 1], padding='SAME', name=name)
 
     def conv_layer(self, bottom, in_channels, out_channels, name):
         with tf.variable_scope(name):

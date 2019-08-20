@@ -4,7 +4,7 @@ import random
 
 
 class ImageGenerator():
-    def __init__(self, batch_size, path, test_num, valid_num):
+    def __init__(self, batch_size, path, test_num=100, valid_num=100):
         self.batch_size = batch_size
         self.last = 0
         self.path = path
@@ -30,7 +30,7 @@ class ImageGenerator():
         else:
             new_size = self.batch_size
         data_batch = np.zeros([new_size, 480, 480, 3])
-        label_batch = [new_size, 4]
+        label_batch = np.zeros([new_size, 4])
         count = 0
         while(count<new_size):
             data_name = self.train_list[self.last]
