@@ -3,30 +3,32 @@ import net
 from utils import ImageGenerator
 
 batch_size = 2
-epochs = 10
+epochs = 500
 learning_rate = 0.0001
-report_epoch = 1
+report_epoch = 100
 summary_path = './summary'
 loss_history = []
 
-generator = ImageGenerator(batch_size, True, './data')
+generator = ImageGenerator('./data', batch_size=batch_size)
 valid_data, valid_label = generator.get_valid()
+
+tf.reset_default_graph()
+
+images = tf.placeholder(tf.float32, [None, 480, 480, 3])
+true_out = tf.placeholder(tf.float32, [None, 4])
+train_mode = tf.placeholder(tf.bool)
+
+network = net.Vgg16()
+network.build(images, train_mode)
 
 with tf.device('/cpu:0'):
     sess = tf.Session()
 
-    images = tf.placeholder(tf.float32, [None, 480, 480, 3])
-    true_out = tf.placeholder(tf.float32, [None, 4])
-    train_mode = tf.placeholder(tf.bool)
-
-    net = net.Vgg16()
-    net.build(images, train_mode)
-
     sess.run(tf.global_variables_initializer())
 
-    cost = tf.reduce_sum((net.prob - true_out)**2)
-    train = tf.train.GradientDescentOptimizer(0.0001).minimize(cost)
-    correct = tf.equal(tf.argmax(net.prob, 1), tf.argmax(true_out, 1))
+    cost = tf.reduce_sum((network.prob - true_out)**2)
+    train = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+    correct = tf.equal(tf.argmax(network.prob, 1), tf.argmax(true_out, 1))
     accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
 
     tf.summary.scalar('cost', cost)
@@ -46,5 +48,6 @@ with tf.device('/cpu:0'):
                                          feed_dict={images: valid_data, true_out: valid_label, train_mode: False})
             valid_writer.add_summary(summary_test, epoch)
             print('Accuracy at step %s: %s' % (epoch, acc))
+            network.save_npy(sess, './train-save.npy')
 
         del batch, img_result

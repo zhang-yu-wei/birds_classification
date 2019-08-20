@@ -8,7 +8,7 @@ VGG_MEAN = [103.939, 116.779, 123.68]
 class Vgg16:
     def __init__(self, vgg16_npy_path=None, trainable=True, dropout=0.5):
         if vgg16_npy_path is not None:
-            self.data_dict = np.load(vgg16_npy_path, encoding='latin1').item()
+            self.data_dict = np.load(vgg16_npy_path, allow_pickle=True, encoding='latin1').item()
         else:
             self.data_dict = None
 
