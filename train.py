@@ -14,7 +14,7 @@ valid_data, valid_label = generator.get_valid()
 
 tf.reset_default_graph()
 
-images = tf.placeholder(tf.float32, [None, 480, 480, 3])
+images = tf.placeholder(tf.float32, [None, 640, 640, 3])
 true_out = tf.placeholder(tf.float32, [None, 4])
 train_mode = tf.placeholder(tf.bool)
 

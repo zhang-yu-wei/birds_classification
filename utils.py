@@ -24,7 +24,7 @@ class ImageGenerator():
 
     def next_batch(self):
         train_last = self.train_num - 1
-        data_batch = np.zeros([self.batch_size, 480, 480, 3])
+        data_batch = np.zeros([self.batch_size, 640, 640, 3])
         label_batch = np.zeros([self.batch_size, 4])
         count = 0
 
@@ -54,7 +54,7 @@ class ImageGenerator():
         return data_batch, label_batch
 
     def get_valid(self):
-        data_batch = np.zeros([self.valid_num, 480, 480, 3])
+        data_batch = np.zeros([self.valid_num, 640, 640, 3])
         label_batch = np.zeros([self.valid_num, 4])
         count = 0
         while(count < self.valid_num):
@@ -66,7 +66,7 @@ class ImageGenerator():
         return data_batch, label_batch
 
     def get_test(self):
-        data_batch = np.zeros([self.test_num, 480, 480, 3])
+        data_batch = np.zeros([self.test_num, 640, 640, 3])
         label_batch = np.zeros([self.test_num, 4])
         count = 0
         while(count < self.test_num):
