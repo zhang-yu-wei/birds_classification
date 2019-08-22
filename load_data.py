@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import cv2
 import os
@@ -59,4 +60,4 @@ def process(class_path, class_name, save_name):
 
 
 if __name__ == '__main__':
-    process('.', 'Class_0', '/data')
+    process('.', 'Class_3', '/data')

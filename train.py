@@ -1,15 +1,16 @@
+from __future__ import print_function
 import tensorflow as tf
 import net
 from utils import ImageGenerator
 
-batch_size = 2
-epochs = 500
+batch_size = 50
+epochs = 5000
 learning_rate = 0.0001
 report_epoch = 100
-summary_path = './summary'
+summary_path = '/media/data_cifs/yuwei/summary'
 loss_history = []
 
-generator = ImageGenerator('./data', batch_size=batch_size)
+generator = ImageGenerator('/media/data_cifs/yuwei/data', batch_size=batch_size, valid_num=1000)
 valid_data, valid_label = generator.get_valid()
 
 tf.reset_default_graph()
@@ -21,7 +22,7 @@ train_mode = tf.placeholder(tf.bool)
 network = net.Vgg16()
 network.build(images, train_mode)
 
-with tf.device('/cpu:0'):
+with tf.device('/gpu:1'):
     sess = tf.Session()
 
     sess.run(tf.global_variables_initializer())
@@ -48,6 +49,6 @@ with tf.device('/cpu:0'):
                                          feed_dict={images: valid_data, true_out: valid_label, train_mode: False})
             valid_writer.add_summary(summary_test, epoch)
             print('Accuracy at step %s: %s' % (epoch, acc))
-            network.save_npy(sess, './train-save.npy')
+            network.save_npy(sess, '/media/data_cifs/yuwei/train-save.npy')
 
         del batch, img_result

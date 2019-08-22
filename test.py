@@ -1,3 +1,4 @@
+from __future__ import print_function
 import tensorflow as tf
 from utils import ImageGenerator
 from net import Vgg16
@@ -8,14 +9,14 @@ test_data, test_label = generator.get_test()
 
 tf.reset_default_graph()
 
-images = tf.placeholder(tf.float32, [None, 480, 480, 3])
+images = tf.placeholder(tf.float32, [None, 640, 640, 3])
 true_out = tf.placeholder(tf.float32, [None, 4])
 train_mode = tf.placeholder(tf.bool)
 
 network = Vgg16(vgg16_npy_path='./train-save.npy')
 network.build(images, train_mode)
 
-with tf.device('/cpu:0'):
+with tf.device('/gpu:2'):
     sess = tf.Session()
 
     sess.run(tf.global_variables_initializer())

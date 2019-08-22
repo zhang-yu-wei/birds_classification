@@ -3,7 +3,7 @@ import os
 import random
 
 
-class ImageGenerator():
+class ImageGenerator:
     def __init__(self, path, batch_size=10, test_num=100, valid_num=100):
         self.batch_size = batch_size
         self.last = 0
